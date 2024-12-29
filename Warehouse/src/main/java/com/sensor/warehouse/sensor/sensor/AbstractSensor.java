@@ -20,12 +20,17 @@ abstract public class AbstractSensor implements SensorPublisher {
     }
 
     public SensorResponse processMessage(String message) throws SensorMessageParseException {
-        message = message.trim();
-        message = message.replace("\n", "");
+        message = sanitizeInput(message);
         SensorResponse sensorResponse = parseInput(message);
         logMessage(sensorResponse);
         notifyListeners(sensorResponse);
         return sensorResponse;
+    }
+
+    private String sanitizeInput(String message) {
+        message = message.trim();
+        message = message.replace("\n", "");
+        return message;
     }
 
     private void notifyListeners(SensorResponse sensorResponse) {
