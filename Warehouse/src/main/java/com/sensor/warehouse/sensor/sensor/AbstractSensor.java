@@ -56,15 +56,13 @@ abstract public class AbstractSensor implements SensorPublisher {
         listeners.add(listener);
     }
 
-    @Override
-    public void notifyThresholdExceeded(String id, int value) {
+    private void notifyThresholdExceeded(String id, int value) {
         for(SensorListener listener : listeners) {
             listener.thresholdExceeded(id, value);
         }
     }
 
-    @Override
-    public void notifyThresholdRestored(String id, int value) {
+    private void notifyThresholdRestored(String id, int value) {
         for(SensorListener listener : listeners) {
             listener.thresholdRestored(id, value);
         }
