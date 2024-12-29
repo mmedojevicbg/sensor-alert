@@ -3,10 +3,13 @@ package com.sensor.warehouse.sensor;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 public class SensorController implements SensorListener {
@@ -23,10 +26,25 @@ public class SensorController implements SensorListener {
     }
 
     public void run() throws Exception {
+
+        Yaml yaml = new Yaml();
+        InputStream inputStream = this.getClass()
+                .getClassLoader()
+                .getResourceAsStream("sensors.yaml");
+        List<Map<String, Object>> rawConfig = yaml.load(inputStream);
         List<SensorConfig> config = new ArrayList<>();
+        for(Map<String, Object> rawConfigItem : rawConfig) {
+            String sensorType = (String)rawConfigItem.get("sensorType");
+            int port = (int)rawConfigItem.get("port");
+            String host = (String)rawConfigItem.get("host");
+            int threshold = (int)rawConfigItem.get("threshold");
+            config.add(new SensorConfig(sensorType, port, host, threshold));
+        }
+        /*
+              List<SensorConfig> config = new ArrayList<>();
         config.add(new SensorConfig("heat-humidity", 4000, "127.0.0.1", 35));
         config.add(new SensorConfig("heat-humidity", 5000, "127.0.0.1", 50));
-
+        */
         List<AbstractSensor> sensors = new ArrayList<>();
         for(SensorConfig sensorConfig : config) {
             AbstractSensor sensor = SensorFactory.create(sensorConfig.getSensorType(),

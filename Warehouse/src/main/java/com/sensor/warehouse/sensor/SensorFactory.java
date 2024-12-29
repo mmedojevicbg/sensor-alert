@@ -8,7 +8,7 @@ public final class SensorFactory {
     public static AbstractSensor create(String sensorType, int port, String host) throws Exception {
         return switch (sensorType) {
             case "heat-humidity" -> new HeatHumiditySensor(port, host);
-            case "fire-detector" -> throw new Exception("Fire detector");
+            case "wind" -> new WindSensor(port, host);
             default -> throw new Exception("Unknown sensor type");
         };
     }

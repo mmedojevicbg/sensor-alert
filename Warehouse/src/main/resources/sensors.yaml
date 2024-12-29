@@ -1,0 +1,12 @@
+- sensorType: heat-humidity
+  port: 4000
+  host: 127.0.0.1
+  threshold: 40
+- sensorType: heat-humidity
+  port: 5000
+  host: 127.0.0.1
+  threshold: 60
+- sensorType: wind
+  port: 6000
+  host: 127.0.0.1
+  threshold: 12
