@@ -82,8 +82,8 @@ public class SensorController implements SensorListener {
         System.out.println(message);
         try {
             channel.basicPublish("", "sensor_queue", null, message.getBytes());
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -93,8 +93,8 @@ public class SensorController implements SensorListener {
         System.out.println(message);
         try {
             channel.basicPublish("", "sensor_queue", null, message.getBytes());
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 }
