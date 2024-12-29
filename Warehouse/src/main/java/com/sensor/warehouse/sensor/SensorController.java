@@ -13,9 +13,18 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 public class SensorController implements SensorListener {
-    private final Channel channel;
+    private Channel channel;
+    private List<SensorConfig> config;
+    private List<AbstractSensor> sensors;
 
-    public SensorController() throws IOException, TimeoutException {
+    public void run() throws UnknownSensorTypeException, IOException, TimeoutException, InterruptedException {
+        initRabbitMQ();
+        parseYamlConfig();
+        createSensors();
+        startSensorThreads();
+    }
+
+    private void initRabbitMQ() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         Connection connection = factory.newConnection();
@@ -25,14 +34,13 @@ public class SensorController implements SensorListener {
         channel.queueDeclare("sensor_queue", false, false, false, null);
     }
 
-    public void run() throws Exception {
-
+    private void parseYamlConfig() {
         Yaml yaml = new Yaml();
         InputStream inputStream = this.getClass()
                 .getClassLoader()
                 .getResourceAsStream("sensors.yaml");
         List<Map<String, Object>> rawConfig = yaml.load(inputStream);
-        List<SensorConfig> config = new ArrayList<>();
+        config = new ArrayList<>();
         for(Map<String, Object> rawConfigItem : rawConfig) {
             String sensorType = (String)rawConfigItem.get("sensorType");
             int port = (int)rawConfigItem.get("port");
@@ -40,12 +48,10 @@ public class SensorController implements SensorListener {
             int threshold = (int)rawConfigItem.get("threshold");
             config.add(new SensorConfig(sensorType, port, host, threshold));
         }
-        /*
-              List<SensorConfig> config = new ArrayList<>();
-        config.add(new SensorConfig("heat-humidity", 4000, "127.0.0.1", 35));
-        config.add(new SensorConfig("heat-humidity", 5000, "127.0.0.1", 50));
-        */
-        List<AbstractSensor> sensors = new ArrayList<>();
+    }
+
+    private void createSensors() throws UnknownSensorTypeException {
+        sensors = new ArrayList<>();
         for(SensorConfig sensorConfig : config) {
             AbstractSensor sensor = SensorFactory.create(sensorConfig.getSensorType(),
                     sensorConfig.getPort(),
@@ -54,7 +60,9 @@ public class SensorController implements SensorListener {
             sensor.registerListener(this);
             sensors.add(sensor);
         }
+    }
 
+    private void startSensorThreads() throws InterruptedException {
         for(AbstractSensor sensor : sensors) {
             sensor.start();
         }
