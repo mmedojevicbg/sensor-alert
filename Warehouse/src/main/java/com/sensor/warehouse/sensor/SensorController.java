@@ -7,6 +7,7 @@ import com.sensor.warehouse.sensor.exception.UnknownSensorTypeException;
 import com.sensor.warehouse.sensor.sensor.AbstractSensor;
 import com.sensor.warehouse.sensor.sensor.SensorFactory;
 import com.sensor.warehouse.sensor.sensor.SensorListener;
+import com.sensor.warehouse.sensor.udp.UdpListener;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ import java.util.concurrent.TimeoutException;
 public class SensorController implements SensorListener {
     private Channel channel;
     private List<SensorConfig> config;
-    private List<AbstractSensor> sensors;
+    private List<UdpListener> sensors;
 
     public void run() throws UnknownSensorTypeException, IOException, TimeoutException, InterruptedException {
         initRabbitMQ();
@@ -57,20 +58,19 @@ public class SensorController implements SensorListener {
     private void createSensors() throws UnknownSensorTypeException {
         sensors = new ArrayList<>();
         for(SensorConfig sensorConfig : config) {
-            AbstractSensor sensor = SensorFactory.create(sensorConfig.getSensorType(),
-                    sensorConfig.getPort(),
-                    sensorConfig.getHost());
+            AbstractSensor sensor = SensorFactory.create(sensorConfig.getSensorType());
             sensor.setThreshold(sensorConfig.getThreshold());
             sensor.registerListener(this);
-            sensors.add(sensor);
+            UdpListener udpListener = new UdpListener(sensorConfig.getHost(), sensorConfig.getPort(), sensor);
+            sensors.add(udpListener);
         }
     }
 
     private void startSensorThreads() throws InterruptedException {
-        for(AbstractSensor sensor : sensors) {
+        for(UdpListener sensor : sensors) {
             sensor.start();
         }
-        for(AbstractSensor sensor : sensors) {
+        for(UdpListener sensor : sensors) {
             sensor.join();
         }
     }

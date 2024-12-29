@@ -3,11 +3,6 @@ package com.sensor.warehouse.sensor.sensor;
 import com.sensor.warehouse.sensor.exception.SensorMessageParseException;
 
 public class WindSensor extends AbstractSensor {
-
-    public WindSensor(int port, String host) {
-        super(port, host);
-    }
-
     protected SensorResponse parseInput(String input) throws SensorMessageParseException {
         String[] parts = input.split(";");
         String sensorId = parts[0];

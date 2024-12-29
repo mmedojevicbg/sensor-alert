@@ -7,11 +7,11 @@ public final class SensorFactory {
         throw new AssertionError("Cannot instantiate utility class");
     }
 
-    public static AbstractSensor create(String sensorType, int port, String host)
+    public static AbstractSensor create(String sensorType)
             throws UnknownSensorTypeException {
         return switch (sensorType) {
-            case "heat-humidity" -> new HeatHumiditySensor(port, host);
-            case "wind" -> new WindSensor(port, host);
+            case "heat-humidity" -> new HeatHumiditySensor();
+            case "wind" -> new WindSensor();
             default -> throw new UnknownSensorTypeException("Unknown sensor type");
         };
     }

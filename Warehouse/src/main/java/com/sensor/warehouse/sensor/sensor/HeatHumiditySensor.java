@@ -6,11 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HeatHumiditySensor extends AbstractSensor {
-
-    public HeatHumiditySensor(int port, String host) {
-        super(port, host);
-    }
-
     protected SensorResponse parseInput(String input) throws SensorMessageParseException {
         String regex = "sensor_id=([a-zA-Z0-9]+); value=([0-9]+)";
         Pattern pattern = Pattern.compile(regex);
