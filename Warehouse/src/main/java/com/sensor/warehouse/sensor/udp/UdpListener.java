@@ -2,7 +2,6 @@ package com.sensor.warehouse.sensor.udp;
 
 import com.sensor.warehouse.sensor.exception.SensorMessageParseException;
 import com.sensor.warehouse.sensor.sensor.AbstractSensor;
-import com.sensor.warehouse.sensor.sensor.SensorResponse;
 
 import java.io.IOException;
 import java.net.*;
