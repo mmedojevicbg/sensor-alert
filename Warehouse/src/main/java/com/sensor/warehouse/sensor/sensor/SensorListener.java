@@ -1,4 +1,4 @@
-package com.sensor.warehouse.sensor;
+package com.sensor.warehouse.sensor.sensor;
 
 public interface SensorListener {
     void thresholdExceeded(String id, int value);

@@ -1,4 +1,6 @@
-package com.sensor.warehouse.sensor;
+package com.sensor.warehouse.sensor.sensor;
+
+import com.sensor.warehouse.sensor.exception.SensorMessageParseException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

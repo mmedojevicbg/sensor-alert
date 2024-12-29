@@ -3,6 +3,10 @@ package com.sensor.warehouse.sensor;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.sensor.warehouse.sensor.exception.UnknownSensorTypeException;
+import com.sensor.warehouse.sensor.sensor.AbstractSensor;
+import com.sensor.warehouse.sensor.sensor.SensorFactory;
+import com.sensor.warehouse.sensor.sensor.SensorListener;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;

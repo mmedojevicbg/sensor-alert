@@ -1,4 +1,6 @@
-package com.sensor.warehouse.sensor;
+package com.sensor.warehouse.sensor.sensor;
+
+import com.sensor.warehouse.sensor.exception.SensorMessageParseException;
 
 import java.io.IOException;
 import java.net.*;

@@ -1,4 +1,4 @@
-package com.sensor.warehouse.sensor;
+package com.sensor.warehouse.sensor.sensor;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
