@@ -34,8 +34,9 @@ public class SensorController implements SensorListener {
         factory.setHost("localhost");
         Connection connection = factory.newConnection();
         channel = connection.createChannel();
-        factory.setUsername("rabbituser");
-        factory.setPassword("W4WNB2PtBsxPU2yg");
+        factory.setUsername("guest");
+        factory.setPassword("guest");
+        factory.setPort(16672);
         channel.queueDeclare("sensor_queue", false, false, false, null);
     }
 
