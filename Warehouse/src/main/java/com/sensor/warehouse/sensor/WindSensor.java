@@ -6,7 +6,7 @@ public class WindSensor extends AbstractSensor {
         super(port, host);
     }
 
-    protected SensorResponse parseInput(String input) {
+    protected SensorResponse parseInput(String input) throws SensorMessageParseException{
         String[] parts = input.split(";");
         String sensorId = parts[0];
         String value = parts[1];
