@@ -7,7 +7,7 @@ import com.sensor.warehouse.sensor.exception.UnknownSensorTypeException;
 import com.sensor.warehouse.sensor.sensor.AbstractSensor;
 import com.sensor.warehouse.sensor.sensor.SensorFactory;
 import com.sensor.warehouse.sensor.sensor.SensorListener;
-import com.sensor.warehouse.sensor.udp.UdpListener;
+import com.sensor.warehouse.sensor.listener.UdpListener;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
@@ -68,11 +68,16 @@ public class SensorController implements SensorListener {
     }
 
     private void startSensorThreads() throws InterruptedException {
+        List<Thread> threads = new ArrayList<>();
         for(UdpListener sensor : sensors) {
-            sensor.start();
+            Thread thread = new Thread(() -> {
+                sensor.listen();
+            });
+            threads.add(thread);
+            thread.start();
         }
-        for(UdpListener sensor : sensors) {
-            sensor.join();
+        for(Thread thread : threads) {
+            thread.join();
         }
     }
 

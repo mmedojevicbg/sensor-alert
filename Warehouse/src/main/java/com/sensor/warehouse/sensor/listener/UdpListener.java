@@ -1,4 +1,4 @@
-package com.sensor.warehouse.sensor.udp;
+package com.sensor.warehouse.sensor.listener;
 
 import com.sensor.warehouse.sensor.exception.SensorMessageParseException;
 import com.sensor.warehouse.sensor.sensor.AbstractSensor;
@@ -6,19 +6,18 @@ import com.sensor.warehouse.sensor.sensor.AbstractSensor;
 import java.io.IOException;
 import java.net.*;
 
-public class UdpListener extends Thread {
+public class UdpListener extends AbstractListener {
     private final int port;
     private final String host;
-    private final AbstractSensor sensor;
     private DatagramSocket socket;
 
     public UdpListener(String host, int port, AbstractSensor sensor) {
+        super(sensor);
         this.host = host;
         this.port = port;
-        this.sensor = sensor;
     }
 
-    public void run() {
+    public void listen() {
         try {
             initSocket();
             listenForMessages();
@@ -43,7 +42,7 @@ public class UdpListener extends Thread {
         socket.receive(packet);
         String received
                 = new String(packet.getData(), 0, packet.getLength());
-        sensor.processMessage(received);
+        passMessageToSensor(received);
     }
 
     private void initSocket() throws UnknownHostException, SocketException {
