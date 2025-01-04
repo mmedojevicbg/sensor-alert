@@ -4,6 +4,8 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.sensor.warehouse.sensor.exception.UnknownSensorTypeException;
+import com.sensor.warehouse.sensor.listener.AbstractListener;
+import com.sensor.warehouse.sensor.listener.ListenerFactory;
 import com.sensor.warehouse.sensor.sensor.AbstractSensor;
 import com.sensor.warehouse.sensor.sensor.SensorFactory;
 import com.sensor.warehouse.sensor.sensor.SensorListener;
@@ -20,7 +22,7 @@ import java.util.concurrent.TimeoutException;
 public class SensorController implements SensorListener {
     private Channel channel;
     private List<SensorConfig> config;
-    private List<UdpListener> sensors;
+    private List<AbstractListener> sensors;
 
     public void run() throws UnknownSensorTypeException, IOException, TimeoutException, InterruptedException {
         initRabbitMQ();
@@ -49,10 +51,11 @@ public class SensorController implements SensorListener {
         config = new ArrayList<>();
         for(Map<String, Object> rawConfigItem : rawConfig) {
             String sensorType = (String)rawConfigItem.get("sensorType");
-            int port = (int)rawConfigItem.get("port");
+            String listener = (String)rawConfigItem.get("listener");
+            Integer port = (Integer)rawConfigItem.get("port");
             String host = (String)rawConfigItem.get("host");
-            int threshold = (int)rawConfigItem.get("threshold");
-            config.add(new SensorConfig(sensorType, port, host, threshold));
+            Integer threshold = (Integer)rawConfigItem.get("threshold");
+            config.add(new SensorConfig(sensorType, listener, port, host, threshold));
         }
     }
 
@@ -62,14 +65,14 @@ public class SensorController implements SensorListener {
             AbstractSensor sensor = SensorFactory.create(sensorConfig.getSensorType());
             sensor.setThreshold(sensorConfig.getThreshold());
             sensor.registerListener(this);
-            UdpListener udpListener = new UdpListener(sensorConfig.getHost(), sensorConfig.getPort(), sensor);
-            sensors.add(udpListener);
+            AbstractListener listener = ListenerFactory.create(sensorConfig.getListener(), sensorConfig.getHost(), sensorConfig.getPort(), sensor);
+            sensors.add(listener);
         }
     }
 
     private void startSensorThreads() throws InterruptedException {
         List<Thread> threads = new ArrayList<>();
-        for(UdpListener sensor : sensors) {
+        for(AbstractListener sensor : sensors) {
             Thread thread = new Thread(() -> {
                 sensor.listen();
             });
