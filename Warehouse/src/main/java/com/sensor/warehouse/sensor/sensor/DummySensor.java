@@ -20,7 +20,7 @@ public class DummySensor extends AbstractSensor {
             @Override
             public void run () {
                 try {
-                    passMessageToSensor("sensor_id=t3; value=" + rand.nextInt(20, 50));
+                    passMessageToProcessor("sensor_id=t3; value=" + rand.nextInt(20, 50));
                 } catch (SensorMessageParseException e) {
                     throw new RuntimeException(e);
                 }

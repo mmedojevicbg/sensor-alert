@@ -10,7 +10,7 @@ public abstract class AbstractSensor {
         this.processor = processor;
     }
 
-    protected void passMessageToSensor(String message) throws SensorMessageParseException {
+    protected void passMessageToProcessor(String message) throws SensorMessageParseException {
         processor.processMessage(message);
     }
 

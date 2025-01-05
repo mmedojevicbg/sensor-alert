@@ -43,7 +43,7 @@ public class UdpSensor extends AbstractSensor {
         socket.receive(packet);
         String received
                 = new String(packet.getData(), 0, packet.getLength());
-        passMessageToSensor(received);
+        passMessageToProcessor(received);
     }
 
     private void initSocket() throws UnknownHostException, SocketException {
