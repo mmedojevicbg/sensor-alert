@@ -2,6 +2,7 @@ package com.sensor.warehouse;
 
 import com.sensor.warehouse.sensor.SensorConfig;
 import com.sensor.warehouse.sensor.SensorController;
+import com.sensor.warehouse.sensor.notifier.RabbitMQNotifier;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
@@ -11,7 +12,8 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        SensorController sensorController = new SensorController(parseYamlConfig());
+        RabbitMQNotifier rabbitMQNotifier = new RabbitMQNotifier();
+        SensorController sensorController = new SensorController(parseYamlConfig(), rabbitMQNotifier);
         sensorController.run();
     }
 
