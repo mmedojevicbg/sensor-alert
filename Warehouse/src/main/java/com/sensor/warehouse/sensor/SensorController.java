@@ -3,13 +3,12 @@ package com.sensor.warehouse.sensor;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.sensor.warehouse.sensor.exception.UnknownSensorTypeException;
+import com.sensor.warehouse.sensor.exception.UnknownProcessorException;
 import com.sensor.warehouse.sensor.listener.AbstractListener;
 import com.sensor.warehouse.sensor.listener.ListenerFactory;
-import com.sensor.warehouse.sensor.sensor.AbstractSensor;
-import com.sensor.warehouse.sensor.sensor.SensorFactory;
-import com.sensor.warehouse.sensor.sensor.SensorListener;
-import com.sensor.warehouse.sensor.listener.UdpListener;
+import com.sensor.warehouse.sensor.processor.AbstractProcessor;
+import com.sensor.warehouse.sensor.processor.ProcessorFactory;
+import com.sensor.warehouse.sensor.processor.ProcessorSubscriber;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
@@ -19,12 +18,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
-public class SensorController implements SensorListener {
+public class SensorController implements ProcessorSubscriber {
     private Channel channel;
     private List<SensorConfig> config;
     private List<AbstractListener> sensors;
 
-    public void run() throws UnknownSensorTypeException, IOException, TimeoutException, InterruptedException {
+    public void run() throws UnknownProcessorException, IOException, TimeoutException, InterruptedException {
         initRabbitMQ();
         parseYamlConfig();
         createSensors();
@@ -50,19 +49,19 @@ public class SensorController implements SensorListener {
         List<Map<String, Object>> rawConfig = yaml.load(inputStream);
         config = new ArrayList<>();
         for(Map<String, Object> rawConfigItem : rawConfig) {
-            String sensorType = (String)rawConfigItem.get("sensorType");
+            String processor = (String)rawConfigItem.get("processor");
             String listener = (String)rawConfigItem.get("listener");
             Integer port = (Integer)rawConfigItem.get("port");
             String host = (String)rawConfigItem.get("host");
             Integer threshold = (Integer)rawConfigItem.get("threshold");
-            config.add(new SensorConfig(sensorType, listener, port, host, threshold));
+            config.add(new SensorConfig(processor, listener, port, host, threshold));
         }
     }
 
-    private void createSensors() throws UnknownSensorTypeException {
+    private void createSensors() throws UnknownProcessorException {
         sensors = new ArrayList<>();
         for(SensorConfig sensorConfig : config) {
-            AbstractSensor sensor = SensorFactory.create(sensorConfig.getSensorType());
+            AbstractProcessor sensor = ProcessorFactory.create(sensorConfig.getProcessor());
             sensor.setThreshold(sensorConfig.getThreshold());
             sensor.registerListener(this);
             AbstractListener listener = ListenerFactory.create(sensorConfig.getListener(), sensorConfig.getHost(), sensorConfig.getPort(), sensor);

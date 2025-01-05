@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SensorConfig {
-    private String sensorType;
+    private String processor;
     private String listener;
     private Integer port;
     private String host;

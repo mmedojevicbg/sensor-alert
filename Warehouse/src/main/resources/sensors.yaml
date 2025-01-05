@@ -1,9 +1,9 @@
-- sensorType: heat-humidity
+- processor: heat-humidity
   listener: udp
   port: 3344
   host: 127.0.0.1
   threshold: 35
-- sensorType: heat-humidity
+- processor: heat-humidity
   listener: udp
   port: 3355
   host: 127.0.0.1

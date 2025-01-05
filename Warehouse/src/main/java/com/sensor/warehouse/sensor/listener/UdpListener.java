@@ -1,7 +1,7 @@
 package com.sensor.warehouse.sensor.listener;
 
 import com.sensor.warehouse.sensor.exception.SensorMessageParseException;
-import com.sensor.warehouse.sensor.sensor.AbstractSensor;
+import com.sensor.warehouse.sensor.processor.AbstractProcessor;
 
 import java.io.IOException;
 import java.net.*;
@@ -11,7 +11,7 @@ public class UdpListener extends AbstractListener {
     private final String host;
     private DatagramSocket socket;
 
-    public UdpListener(String host, int port, AbstractSensor sensor) {
+    public UdpListener(String host, int port, AbstractProcessor sensor) {
         super(sensor);
         this.host = host;
         this.port = port;

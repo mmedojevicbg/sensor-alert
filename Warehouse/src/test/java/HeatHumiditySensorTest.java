@@ -1,29 +1,29 @@
 import com.sensor.warehouse.sensor.exception.SensorMessageParseException;
-import com.sensor.warehouse.sensor.sensor.AbstractSensor;
-import com.sensor.warehouse.sensor.sensor.HeatHumiditySensor;
-import com.sensor.warehouse.sensor.sensor.SensorListener;
-import com.sensor.warehouse.sensor.sensor.SensorResponse;
+import com.sensor.warehouse.sensor.processor.AbstractProcessor;
+import com.sensor.warehouse.sensor.processor.HeatHumidityProcessor;
+import com.sensor.warehouse.sensor.processor.ProcessorSubscriber;
+import com.sensor.warehouse.sensor.processor.ProcessorResponse;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class HeatHumiditySensorTest {
-    AbstractSensor sensor;
+    AbstractProcessor sensor;
     int threshold = 50;
 
     @BeforeEach
     void init() {
-        sensor = new HeatHumiditySensor();
+        sensor = new HeatHumidityProcessor();
         sensor.setThreshold(threshold);
     }
 
     @Test
     @Order(1)
     void test_parse() throws SensorMessageParseException {
-        SensorResponse sensorResponse = sensor.processMessage("sensor_id=t1; value=34");
-        assertEquals("t1", sensorResponse.getSensorId());
-        assertEquals(34, sensorResponse.getValue());
+        ProcessorResponse processorResponse = sensor.processMessage("sensor_id=t1; value=34");
+        assertEquals("t1", processorResponse.getSensorId());
+        assertEquals(34, processorResponse.getValue());
     }
 
     @Test
@@ -47,7 +47,7 @@ public class HeatHumiditySensorTest {
         assertFalse(listener.thresholdExceeded);
     }
 
-    class Listener implements SensorListener {
+    class Listener implements ProcessorSubscriber {
         public boolean thresholdExceeded = false;
         @Override
         public void thresholdExceeded(String id, int value) {

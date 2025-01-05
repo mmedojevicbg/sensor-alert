@@ -1,12 +1,12 @@
 package com.sensor.warehouse.sensor.listener;
 
 import com.sensor.warehouse.sensor.exception.SensorMessageParseException;
-import com.sensor.warehouse.sensor.sensor.AbstractSensor;
+import com.sensor.warehouse.sensor.processor.AbstractProcessor;
 
 public abstract class AbstractListener {
-    private final AbstractSensor sensor;
+    private final AbstractProcessor sensor;
 
-    public AbstractListener(AbstractSensor sensor) {
+    public AbstractListener(AbstractProcessor sensor) {
         this.sensor = sensor;
     }
 

@@ -1,14 +1,14 @@
 package com.sensor.warehouse.sensor.listener;
 
 import com.sensor.warehouse.sensor.exception.SensorMessageParseException;
-import com.sensor.warehouse.sensor.sensor.AbstractSensor;
+import com.sensor.warehouse.sensor.processor.AbstractProcessor;
 
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class DummyListener extends AbstractListener {
-    public DummyListener(AbstractSensor sensor) {
+    public DummyListener(AbstractProcessor sensor) {
         super(sensor);
     }
 

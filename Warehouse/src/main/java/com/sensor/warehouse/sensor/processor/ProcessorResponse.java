@@ -1,4 +1,4 @@
-package com.sensor.warehouse.sensor.sensor;
+package com.sensor.warehouse.sensor.processor;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SensorResponse {
+public class ProcessorResponse {
     private String sensorId;
     private int value;
 }
