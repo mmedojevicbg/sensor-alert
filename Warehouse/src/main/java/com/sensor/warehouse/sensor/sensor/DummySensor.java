@@ -15,6 +15,7 @@ public class DummySensor extends AbstractSensor {
                 passMessageToProcessor("sensor_id=t3; value=" + i * 10);
                 Thread.sleep(200);
             }
+            passMessageToProcessor("sensor_id=t3; value=10");
         } catch (InterruptedException | SensorMessageParseException e) {
             throw new RuntimeException(e);
         }

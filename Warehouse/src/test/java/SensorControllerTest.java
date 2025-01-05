@@ -34,8 +34,20 @@ public class SensorControllerTest {
 
     @Test
     @Order(1)
-    void test_run() throws SensorMessageParseException {
-        assertEquals(5, notifier.messages.size());
+    void test_message_count() throws SensorMessageParseException {
+        assertEquals(7, notifier.messages.size());
+    }
+
+    @Test
+    @Order(2)
+    void test_exceeded_message_count() throws SensorMessageParseException {
+        assertEquals(5, notifier.messages.stream().filter(x -> x.contains("exceeded")).count());
+    }
+
+    @Test
+    @Order(3)
+    void test_restored_message_count() throws SensorMessageParseException {
+        assertEquals(2, notifier.messages.stream().filter(x -> x.contains("restored")).count());
     }
 
     class TestNotifier implements Notifier {
