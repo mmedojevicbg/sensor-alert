@@ -8,8 +8,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class DummySensor extends AbstractSensor {
-    public DummySensor(AbstractProcessor sensor) {
-        super(sensor);
+    public DummySensor(AbstractProcessor processor) {
+        super(processor);
     }
 
     @Override

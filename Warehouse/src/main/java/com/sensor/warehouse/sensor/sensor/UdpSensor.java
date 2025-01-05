@@ -11,8 +11,8 @@ public class UdpSensor extends AbstractSensor {
     private final String host;
     private DatagramSocket socket;
 
-    public UdpSensor(String host, int port, AbstractProcessor sensor) {
-        super(sensor);
+    public UdpSensor(String host, int port, AbstractProcessor processor) {
+        super(processor);
         this.host = host;
         this.port = port;
     }
