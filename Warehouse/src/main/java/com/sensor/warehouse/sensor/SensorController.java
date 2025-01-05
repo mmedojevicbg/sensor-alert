@@ -65,7 +65,7 @@ public class SensorController implements ProcessorSubscriber {
             AbstractProcessor sensor = ProcessorFactory.create(sensorConfig.getProcessor());
             sensor.setThreshold(sensorConfig.getThreshold());
             sensor.registerListener(this);
-            AbstractSensor listener = SensorFactory.create(sensorConfig.getSensor(), sensorConfig.getHost(), sensorConfig.getPort(), sensor);
+            AbstractSensor listener = SensorFactory.create(sensorConfig, sensor);
             sensors.add(listener);
         }
     }
