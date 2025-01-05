@@ -1,17 +1,17 @@
-package com.sensor.warehouse.sensor.listener;
+package com.sensor.warehouse.sensor.sensor;
 
 import com.sensor.warehouse.sensor.exception.SensorMessageParseException;
 import com.sensor.warehouse.sensor.processor.AbstractProcessor;
 
-public abstract class AbstractListener {
-    private final AbstractProcessor sensor;
+public abstract class AbstractSensor {
+    private final AbstractProcessor processor;
 
-    public AbstractListener(AbstractProcessor sensor) {
-        this.sensor = sensor;
+    public AbstractSensor(AbstractProcessor processor) {
+        this.processor = processor;
     }
 
     protected void passMessageToSensor(String message) throws SensorMessageParseException {
-        sensor.processMessage(message);
+        processor.processMessage(message);
     }
 
     abstract public void listen();

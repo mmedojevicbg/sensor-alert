@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SensorConfig {
     private String processor;
-    private String listener;
+    private String sensor;
     private Integer port;
     private String host;
     private Integer threshold;

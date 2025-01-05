@@ -8,7 +8,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class HeatHumiditySensorTest {
+public class HeatHumidityProcessorTest {
     AbstractProcessor sensor;
     int threshold = 50;
 
