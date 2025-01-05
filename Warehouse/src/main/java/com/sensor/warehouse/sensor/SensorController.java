@@ -10,23 +10,23 @@ import com.sensor.warehouse.sensor.sensor.SensorFactory;
 import com.sensor.warehouse.sensor.processor.AbstractProcessor;
 import com.sensor.warehouse.sensor.processor.ProcessorFactory;
 import com.sensor.warehouse.sensor.processor.ProcessorSubscriber;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 public class SensorController implements ProcessorSubscriber {
+    private final List<SensorConfig> config;
     private Channel channel;
-    private List<SensorConfig> config;
     private List<AbstractSensor> sensors;
+
+    public SensorController(List<SensorConfig> config) {
+        this.config = config;
+    }
 
     public void run() throws UnknownProcessorException, IOException, TimeoutException, InterruptedException, UnknownSensorException {
         initRabbitMQ();
-        parseYamlConfig();
         createSensors();
         startSensorThreads();
     }
@@ -40,23 +40,6 @@ public class SensorController implements ProcessorSubscriber {
         factory.setPassword("guest");
         factory.setPort(16672);
         channel.queueDeclare("sensor_queue", false, false, false, null);
-    }
-
-    private void parseYamlConfig() {
-        Yaml yaml = new Yaml();
-        InputStream inputStream = this.getClass()
-                .getClassLoader()
-                .getResourceAsStream("sensors.yaml");
-        List<Map<String, Object>> rawConfig = yaml.load(inputStream);
-        config = new ArrayList<>();
-        for(Map<String, Object> rawConfigItem : rawConfig) {
-            String processor = (String)rawConfigItem.get("processor");
-            String sensor = (String)rawConfigItem.get("sensor");
-            Integer port = (Integer)rawConfigItem.get("port");
-            String host = (String)rawConfigItem.get("host");
-            Integer threshold = (Integer)rawConfigItem.get("threshold");
-            config.add(new SensorConfig(processor, sensor, port, host, threshold));
-        }
     }
 
     private void createSensors() throws UnknownProcessorException, UnknownSensorException {
