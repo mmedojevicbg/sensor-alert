@@ -9,19 +9,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class HeatHumidityProcessorTest {
-    AbstractProcessor sensor;
+    AbstractProcessor processor;
     int threshold = 50;
 
     @BeforeEach
     void init() {
-        sensor = new HeatHumidityProcessor();
-        sensor.setThreshold(threshold);
+        processor = new HeatHumidityProcessor();
+        processor.setThreshold(threshold);
     }
 
     @Test
     @Order(1)
     void test_parse() throws SensorMessageParseException {
-        ProcessorResponse processorResponse = sensor.processMessage("sensor_id=t1; value=34");
+        ProcessorResponse processorResponse = processor.processMessage("sensor_id=t1; value=34");
         assertEquals("t1", processorResponse.getSensorId());
         assertEquals(34, processorResponse.getValue());
     }
@@ -30,7 +30,7 @@ public class HeatHumidityProcessorTest {
     @Order(2)
     void test_parseException() {
         assertThrows(SensorMessageParseException.class, () ->
-                sensor.processMessage("malformed message 1234"));
+                processor.processMessage("malformed message 1234"));
     }
 
     @Test
@@ -39,11 +39,11 @@ public class HeatHumidityProcessorTest {
         int aboveThreshold = threshold + 5;
         int belowThreshold = threshold - 5;
         Listener listener = new Listener();
-        sensor.registerListener(listener);
+        processor.registerListener(listener);
         assertFalse(listener.thresholdExceeded);
-        sensor.processMessage("sensor_id=t1; value=" + aboveThreshold);
+        processor.processMessage("sensor_id=t1; value=" + aboveThreshold);
         assertTrue(listener.thresholdExceeded);
-        sensor.processMessage("sensor_id=t1; value=" + belowThreshold);
+        processor.processMessage("sensor_id=t1; value=" + belowThreshold);
         assertFalse(listener.thresholdExceeded);
     }
 

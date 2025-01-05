@@ -3,10 +3,6 @@ package com.sensor.warehouse.sensor.sensor;
 import com.sensor.warehouse.sensor.exception.SensorMessageParseException;
 import com.sensor.warehouse.sensor.processor.AbstractProcessor;
 
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class DummySensor extends AbstractSensor {
     public DummySensor(AbstractProcessor processor) {
         super(processor);
@@ -14,17 +10,13 @@ public class DummySensor extends AbstractSensor {
 
     @Override
     public void listen() {
-        Random rand = new Random();
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run () {
-                try {
-                    passMessageToProcessor("sensor_id=t3; value=" + rand.nextInt(20, 50));
-                } catch (SensorMessageParseException e) {
-                    throw new RuntimeException(e);
-                }
+        try {
+            for(int i = 1; i <= 5; i++) {
+                passMessageToProcessor("sensor_id=t3; value=" + i * 10);
+                Thread.sleep(200);
             }
-        }, 1000, 5000);
+        } catch (InterruptedException | SensorMessageParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

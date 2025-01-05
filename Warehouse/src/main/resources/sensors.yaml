@@ -8,3 +8,6 @@
   port: 3355
   host: 127.0.0.1
   threshold: 50
+- processor: heat-humidity
+  sensor: dummy
+  threshold: 30
