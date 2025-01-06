@@ -21,19 +21,25 @@ public class DummySensorTest {
     void init() {
         processor = new TestProcessor();
         sensor = new DummySensor(processor);
+        sensor.listen();
     }
 
     @Test
     @Order(1)
-    void test_listen() throws SensorMessageParseException {
-        sensor.listen();
-        assertEquals(5, processor.messages.size());
+    void test_message_count() throws SensorMessageParseException {
+        assertEquals(6, processor.messages.size());
+    }
+
+    @Test
+    @Order(1)
+    void test_message_content() throws SensorMessageParseException {
+        assertEquals(6, processor.messages.size());
         assertEquals("sensor_id=t3; value=10", processor.messages.get(0));
         assertEquals("sensor_id=t3; value=20", processor.messages.get(1));
         assertEquals("sensor_id=t3; value=30", processor.messages.get(2));
         assertEquals("sensor_id=t3; value=40", processor.messages.get(3));
         assertEquals("sensor_id=t3; value=50", processor.messages.get(4));
-
+        assertEquals("sensor_id=t3; value=10", processor.messages.get(5));
     }
 
     class TestProcessor extends AbstractProcessor {
