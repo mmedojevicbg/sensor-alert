@@ -14,6 +14,7 @@ public final class SensorFactory {
         return switch (config.getSensor()) {
             case "udp" -> new UdpSensor(config.getHost(), config.getPort(), processor);
             case "dummy" -> new DummySensor(processor);
+            case "socket" -> new SocketSensor(config.getPort(), processor);
             default -> throw new UnknownSensorException("Unknown sensor type");
         };
     }

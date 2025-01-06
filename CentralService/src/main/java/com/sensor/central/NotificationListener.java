@@ -17,11 +17,11 @@ public class NotificationListener {
     private void initRabbitMQ() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
-        Connection connection = factory.newConnection();
-        channel = connection.createChannel();
         factory.setUsername("guest");
         factory.setPassword("guest");
-        factory.setPort(16672);
+        factory.setPort(6672);
+        Connection connection = factory.newConnection();
+        channel = connection.createChannel();
         channel.queueDeclare("sensor_queue", false, false, false, null);
     }
 

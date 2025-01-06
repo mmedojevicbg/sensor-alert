@@ -11,3 +11,7 @@
 - processor: heat-humidity
   sensor: dummy
   threshold: 30
+- processor: heat-humidity
+  sensor: socket
+  port: 3000
+  threshold: 30
