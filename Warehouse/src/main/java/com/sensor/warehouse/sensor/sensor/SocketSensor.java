@@ -26,10 +26,15 @@ public class SocketSensor extends AbstractSensor {
         try {
             serverSocket = new ServerSocket(port);
             while (true) {
-                clientSocket = serverSocket.accept();
-                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                String greeting = in.readLine();
-                passMessageToProcessor(greeting);
+                try (Socket socket = serverSocket.accept();
+                     BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        passMessageToProcessor(line);
+                    }
+                } catch (IOException e) {
+                    System.err.println("Error handling client: " + e.getMessage());
+                }
             }
         } catch (IOException | SensorMessageParseException e) {
             throw new RuntimeException(e);
